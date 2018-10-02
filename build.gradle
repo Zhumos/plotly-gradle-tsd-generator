@@ -1,0 +1,65 @@
+// Run at command line using 'gradle -q'
+
+defaultTasks 'build'
+
+class ConfigGroups {
+
+  // Available versions to point `project.currentConfigGroup` (found below) at.
+  static PLOTLY_1_38_3 = [ name: "Plotly.js", version: "1.38.3", jsonSchema: "./json/plot-schema-1.38.3.json" ]
+  static PLOTLY_1_39_4 = [ name: "Plotly.js", version: "1.39.4", jsonSchema: "./json/plot-schema-1.39.4.json" ]
+  static PLOTLY_1_41_0 = [ name: "Plotly.js", version: "1.41.0", jsonSchema: "./json/plot-schema-1.41.0.json" ]
+
+  // For testing the generator with smaller Plotly schema JSON
+  static PLOTLY_TINY = [ name: "Plotly.js", version: "1.21.3", jsonSchema: "./json/plotly-schema-tiny.json" ]
+  static PLOTLY_SMALL = [ name: "Plotly.js", version: "1.21.3", jsonSchema: "./json/plotly-schema-small.json" ]
+}
+
+// Project-level extra properties
+project.ext {
+
+  // Update this to change which version is built against:
+  def currentConfigGroup = ConfigGroups.PLOTLY_1_41_0
+
+  config = new Config(
+    libraryName: currentConfigGroup.name,
+    libraryVersion: currentConfigGroup.version,
+    jsonSchema: file( currentConfigGroup.jsonSchema )
+  )
+}
+
+task initialize() << {
+  Config config = project.config
+  println " "
+  println " "
+  println "*************************************************************************************************"
+  println " "
+  println "Make sure to add any new plot-schema.json files to the /json folder."
+  println "Also copy the latest plotly.js file to the /js folder."
+  println " "
+  
+  println "[To debug, use command: gradle build --no-daemon -Dorg.gradle.debug=true --stacktrace"
+  println "Then run as Remote Debug]"
+  println " "
+  
+  println "Creating ${ config.libraryName } ${ config.libraryVersion } Definition File..."
+  println "Using JSON schema from: ${ config.jsonSchema}"
+  println " "
+  println "*************************************************************************************************"
+  println " "
+  println " "
+}
+
+task createTsd( dependsOn: initialize ) << {
+  println "Initializing generator..."
+  TsdGenerator generator = new TsdGenerator( config: config )
+  generator.generate()
+}
+
+// To debug?
+// Command line: gradle build --no-daemon -Dorg.gradle.debug=true --stacktrace
+// Then use run/debug Remote Debug
+task build( dependsOn: createTsd ) << {
+  println " "
+  println "Build complete"
+  println " "
+}
