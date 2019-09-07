@@ -29,4 +29,8 @@ class AttributeConfig {
 
     String name // attribute name
     String parent // parent attribute name
+    
+    //Newer fields
+    Boolean anim
+    String regex
 }

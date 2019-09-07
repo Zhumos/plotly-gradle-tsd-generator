@@ -53,7 +53,18 @@ class TypeUtils {
         "violin": "Violin",
         "splom": "Splom",
         "streamtube": "Streamtube",
-        "barpolar": "BarPolar"
+        "barpolar": "BarPolar",
+        
+        "funnel": "Funnel",
+        "waterfall": "Waterfall",
+        "sunburst": "Sunburst",
+        "funnelarea": "FunnelArea",
+        "isosurface": "IsoSurface",
+        "volume": "Volume",
+        "parcats": "ParCats",
+        "choroplethmapbox": "ChoroplethMapBox",
+        "densitymapbox": "DensityMapBox",
+        "indicator": "Indicator"
     ]
 
     def getTraceName( jsonName ) {

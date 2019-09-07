@@ -119,7 +119,11 @@ class SchemaParser {
 
     def buildReferenceLists() {
         schema.layout.layoutAttributes.each { key, value ->
-            if( key == "editType" ) {
+            // Ignore _deprecated object
+            if ( key == "_deprecated" ) {
+                return;
+            }
+            else if( key == "editType" ) {
                 editTypes.layout << value
             }
             else if( !( value instanceof Map ) || !value[ "role" ] ) {
